@@ -19,11 +19,6 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public void create(String name) {
-        userGateway.create(name);
-    }
-
-    @Override
     public void followSeller(Long userId, Long sellerId) {
         this.userGateway.followSeller(userId,sellerId);
     }

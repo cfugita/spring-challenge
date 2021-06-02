@@ -12,11 +12,13 @@ public class Seller {
     private Long id;
     private String name;
 
-    @ManyToMany(mappedBy = "following", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "following", targetEntity = User.class, cascade = CascadeType.PERSIST)
     private List<User> followers = new ArrayList<>();
 
-    public Seller(Long id, String name) {
-        this.id = id;
+    @OneToMany(mappedBy = "seller", targetEntity = Product.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Product> products = new ArrayList<>();
+
+    public Seller(String name) {
         this.name = name;
     }
 
@@ -48,5 +50,17 @@ public class Seller {
     }
     public void addFollower(User user){
         this.getFollowers().add(user);
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void addProduct(Product product) {
+        this.getProducts().add(product);
     }
 }

@@ -1,6 +1,9 @@
 package br.com.digitalhouse.springchallenge.controllers;
 
+import br.com.digitalhouse.springchallenge.dataprovider.entity.Post;
+import br.com.digitalhouse.springchallenge.usecases.PostUseCase;
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -12,14 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class SellerController {
 
     SellerUseCase sellerUseCase;
+    PostUseCase postUseCase;
 
-    public SellerController(SellerUseCase sellerUseCase) {
+    public SellerController(SellerUseCase sellerUseCase, PostUseCase postUseCase) {
         this.sellerUseCase = sellerUseCase;
-    }
-
-    @PostMapping("/create")
-    void create (@RequestBody String name) {
-        this.sellerUseCase.create(name);
+        this.postUseCase = postUseCase;
     }
 
     @GetMapping("/{sellerId}/followers/count/")
@@ -38,5 +38,10 @@ public class SellerController {
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("{sellerId}/product/newpost")
+    void newPost(@PathVariable Long sellerId, @RequestBody PostRequest postRequest){
+        this.postUseCase.create(sellerId, postRequest);
     }
 }

@@ -19,12 +19,6 @@ public class SellerDataProvider implements SellerGateway {
     }
 
     @Override
-    public void create(String name) {
-        Seller seller = new Seller(null,name);
-        var userData = sellerRepository.save(seller);
-    }
-
-    @Override
     public Seller getById(Long sellerId) {
 //        Seller seller = this.sellerRepository.getById(sellerId);
         Optional<Seller> seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst();

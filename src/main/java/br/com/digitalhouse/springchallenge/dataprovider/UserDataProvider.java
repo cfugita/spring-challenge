@@ -22,6 +22,7 @@ public class UserDataProvider implements UserGateway {
 
     @Override
     public void followSeller(Long userId, Long sellerId) {
+
         Seller seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst().get();
         User user = this.userRepository.findAll().stream().filter(u -> u.getId().equals(userId)).findFirst().get();
 
@@ -35,11 +36,5 @@ public class UserDataProvider implements UserGateway {
     public User getById(Long userId) {
         Optional<User> user = this.userRepository.findAll().stream().filter(s -> s.getId().equals(userId)).findFirst();
         return user.orElse(null);
-    }
-
-    @Override
-    public void create(String name){
-        User user = new User(null,name);
-        var userData = userRepository.save(user);
     }
 }

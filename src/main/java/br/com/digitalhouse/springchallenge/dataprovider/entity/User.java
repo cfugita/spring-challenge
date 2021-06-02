@@ -19,8 +19,7 @@ public class User {
     )
     private List<Seller> following = new ArrayList<>();
 
-    public User(Long id, String name) {
-        this.id = id;
+    public User(String name) {
         this.name = name;
     }
 

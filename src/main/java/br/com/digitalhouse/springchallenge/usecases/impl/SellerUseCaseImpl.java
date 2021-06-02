@@ -21,11 +21,6 @@ public class SellerUseCaseImpl implements SellerUseCase {
     }
 
     @Override
-    public void create(String name) {
-        this.sellerGateway.create(name);
-    }
-
-    @Override
     public SellerFollowerCountResponse countFollowers(Long sellerId) {
 
         Seller seller = this.sellerGateway.getById(sellerId);
