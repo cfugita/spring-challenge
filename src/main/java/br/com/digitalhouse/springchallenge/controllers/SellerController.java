@@ -30,4 +30,13 @@ public class SellerController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/{sellerId}/followers/list/")
+    public ResponseEntity<Object> listFollowers (@PathVariable Long sellerId) {
+        try {
+            return new ResponseEntity<>(this.sellerUseCase.getListFollowers(sellerId), HttpStatus.OK);
+        } catch (RuntimeException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

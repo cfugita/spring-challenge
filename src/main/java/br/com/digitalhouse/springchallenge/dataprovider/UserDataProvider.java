@@ -8,6 +8,8 @@ import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserDataProvider implements UserGateway {
     private UserRepository userRepository;
@@ -27,6 +29,12 @@ public class UserDataProvider implements UserGateway {
         seller.addFollower(user);
         this.sellerRepository.save(seller);
         this.userRepository.save(user);
+    }
+
+    @Override
+    public User getById(Long userId) {
+        Optional<User> user = this.userRepository.findAll().stream().filter(s -> s.getId().equals(userId)).findFirst();
+        return user.orElse(null);
     }
 
     @Override
