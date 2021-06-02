@@ -20,7 +20,6 @@ public class UserDataProvider implements UserGateway {
 
     @Override
     public void followSeller(Long userId, Long sellerId) {
-        System.out.println("data provider");
         Seller seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst().get();
         User user = this.userRepository.findAll().stream().filter(u -> u.getId().equals(userId)).findFirst().get();
 
@@ -28,14 +27,6 @@ public class UserDataProvider implements UserGateway {
         seller.addFollower(user);
         this.sellerRepository.save(seller);
         this.userRepository.save(user);
-
-        User newUSer = new User(null, "Alo");
-        Seller newSeller = new Seller(null, "Thau");
-        this.userRepository.save(newUSer);
-        this.sellerRepository.save(newSeller);
-        newUSer.addFollowing(newSeller);
-        this.userRepository.save(newUSer);
-        this.sellerRepository.save(newSeller);
     }
 
     @Override

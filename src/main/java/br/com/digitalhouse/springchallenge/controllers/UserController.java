@@ -19,8 +19,6 @@ public class UserController {
 
     @PostMapping("/{userId}/follow/{sellerId}")
     public void followSeller (@PathVariable Long userId, @PathVariable Long sellerId) {
-        System.out.println(userId);
-        System.out.println(sellerId);
         this.userUseCase.followSeller(userId,sellerId);
     }
 }
