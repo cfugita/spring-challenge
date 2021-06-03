@@ -11,12 +11,9 @@ public class Product {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "product", targetEntity = Post.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
     private List<Post> posts = new ArrayList<>();
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "seller_id", referencedColumnName = "id")
-    private Seller seller;
 
     private String name;
     private String type;
@@ -49,14 +46,6 @@ public class Product {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
     }
 
     public String getName() {

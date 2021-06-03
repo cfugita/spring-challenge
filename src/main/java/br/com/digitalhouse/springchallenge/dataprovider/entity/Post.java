@@ -1,6 +1,7 @@
 package br.com.digitalhouse.springchallenge.dataprovider.entity;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -9,17 +10,12 @@ public class Post {
     @Id
     @GeneratedValue
     private Long id;
-
     private Date date;
-
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
-
     private Integer category;
     private double price;
 
     public Post(Integer category, double price) {
+        this.date = Calendar.getInstance().getTime();
         this.category = category;
         this.price = price;
     }
@@ -41,14 +37,6 @@ public class Post {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public Integer getCategory() {

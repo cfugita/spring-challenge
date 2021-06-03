@@ -26,11 +26,10 @@ public class SpringChallengeApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println("aaaaaaaa");
-		User user1 = new User("Camila");
-		User user2 = new User("Pedro");
-		Seller seller1 = new Seller ("Antonio");
-		Seller seller2 = new Seller ("Marcelo");
+		User user1 = new User("Camila Oliveira");
+		User user2 = new User("Pedro Lima");
+		Seller seller1 = new Seller ("Fast Shop");
+		Seller seller2 = new Seller ("Americanas");
 
 		sellerRepository.save(seller1);
 		sellerRepository.save(seller2);
@@ -38,9 +37,12 @@ public class SpringChallengeApplication implements CommandLineRunner {
 		userRepository.save(user1);
 		userRepository.save(user2);
 
-		Product product1 = new Product("Cadeira Gamer", "Gamer","Racer","Red","Special Edition");
+		Product product1 = new Product("Chair", "Gamer","Racer","Red","Special Edition");
+		Product product2 = new Product("Keyboard", "Gamer","Racer","White","Connection Bluetooth");
 
 		seller1.addProduct(product1);
+		seller2.addProduct(product2);
 		sellerRepository.save(seller1);
+		sellerRepository.save(seller2);
 	}
 }

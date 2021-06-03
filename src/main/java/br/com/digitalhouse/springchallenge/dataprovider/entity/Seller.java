@@ -15,7 +15,8 @@ public class Seller {
     @ManyToMany(mappedBy = "following", targetEntity = User.class, cascade = CascadeType.PERSIST)
     private List<User> followers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "seller", targetEntity = Product.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="seller_id")
     private List<Product> products = new ArrayList<>();
 
     public Seller(String name) {

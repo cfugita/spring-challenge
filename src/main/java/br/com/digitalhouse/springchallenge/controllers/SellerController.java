@@ -40,8 +40,8 @@ public class SellerController {
         }
     }
 
-    @PostMapping("{sellerId}/product/newpost")
-    void newPost(@PathVariable Long sellerId, @RequestBody PostRequest postRequest){
-        this.postUseCase.create(sellerId, postRequest);
+    @PostMapping("{sellerId}/product/{productId}/newPost")
+    void newPost(@PathVariable Long sellerId, @PathVariable Long productId, @RequestBody PostRequest postRequest){
+        this.sellerUseCase.newPost(sellerId, productId, postRequest);
     }
 }

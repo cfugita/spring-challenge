@@ -5,6 +5,7 @@ import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 import br.com.digitalhouse.springchallenge.domain.SellerGateway;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerListResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowerResponse;
@@ -46,5 +47,10 @@ public class SellerUseCaseImpl implements SellerUseCase {
         sellerFollowerListResponse.setSellerId(seller.getId());
 
         return sellerFollowerListResponse;
+    }
+
+    @Override
+    public void newPost(Long sellerId, Long productId, PostRequest postrequest) {
+        this.sellerGateway.newPost(sellerId,productId,postrequest);
     }
 }
