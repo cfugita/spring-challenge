@@ -53,7 +53,7 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public UserFeedResponse getFeed(Long userId) {
+    public UserFeedResponse getFeed(Long userId, String order) {
         List<PostDTO> postsDTO = this.userGateway.getFeed(userId);
         List<PostResponse> posts = new ArrayList<>();
 
@@ -70,9 +70,17 @@ public class UserUseCaseImpl implements UserUseCase {
             PostResponse postResponse = new PostResponse(postDTO.getPostId(),postDTO.getDate(),productResponse,postDTO.getCategory(),postDTO.getPrice());
             posts.add(postResponse);
         }
+        if(order != null) { this.orderPostsByDate(posts,order); }
 
-        posts.sort(PostResponse::compareTo);
         return new UserFeedResponse(userId,posts);
+    }
+
+    public void orderPostsByDate (List<PostResponse> posts, String order) {
+        posts.sort(PostResponse::compareTo);
+
+        if(order.equals("date_asc")){
+            Collections.reverse(posts);
+        }
     }
 
     public void orderListByName (List<SellerFollowedResponse> following, String order) {

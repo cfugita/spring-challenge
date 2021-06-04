@@ -34,9 +34,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/products/following")
-    public ResponseEntity<Object> getFeed (@PathVariable Long userId) {
+    public ResponseEntity<Object> getFeed (@PathVariable Long userId, @RequestParam(required = false) String order) {
         try {
-            return new ResponseEntity<>(this.userUseCase.getFeed(userId), HttpStatus.OK);
+            return new ResponseEntity<>(this.userUseCase.getFeed(userId, order), HttpStatus.OK);
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }

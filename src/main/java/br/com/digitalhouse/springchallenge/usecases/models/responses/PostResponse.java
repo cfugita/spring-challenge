@@ -65,11 +65,9 @@ public class PostResponse implements Comparable<PostResponse>{
         if(this.getDate().after(postResponse.getDate())){
             return -1;
         }
-
         if(this.getDate().before(postResponse.getDate())){
             return 1;
         }
-
         return 0;
     }
 }

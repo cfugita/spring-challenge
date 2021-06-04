@@ -7,5 +7,5 @@ public interface UserUseCase {
     void followSeller (Long userId, Long sellerId);
     void unfollowSeller (Long userId, Long sellerId);
     UserFollowingListResponse getListFollowing (Long userId, String order);
-    UserFeedResponse getFeed (Long userId);
+    UserFeedResponse getFeed (Long userId, String order);
 }
