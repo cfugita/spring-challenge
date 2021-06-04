@@ -26,9 +26,9 @@ public class SellerController {
     }
 
     @GetMapping("/{sellerId}/followers/list/")
-    public ResponseEntity<Object> listFollowers (@PathVariable Long sellerId) {
+    public ResponseEntity<Object> listFollowers (@PathVariable Long sellerId, @RequestParam(required = false) String order) {
         try {
-            return new ResponseEntity<>(this.sellerUseCase.getListFollowers(sellerId), HttpStatus.OK);
+            return new ResponseEntity<>(this.sellerUseCase.getListFollowers(sellerId, order), HttpStatus.OK);
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }

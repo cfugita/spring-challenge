@@ -12,6 +12,8 @@ import br.com.digitalhouse.springchallenge.usecases.models.responses.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,7 +34,7 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public UserFollowingListResponse getListFollowing(Long userId) {
+    public UserFollowingListResponse getListFollowing(Long userId, String order) {
         User user = this.userGateway.getById(userId);
         UserFollowingListResponse userFollowingListResponse = new UserFollowingListResponse();
 
@@ -41,6 +43,8 @@ public class UserUseCaseImpl implements UserUseCase {
             SellerFollowedResponse sellerFollowedResponse = new SellerFollowedResponse(seller.getId(), seller.getName());
             userFollowingListResponse.getFollowing().add(sellerFollowedResponse);
         }
+
+        if(order != null) { this.orderListByName(userFollowingListResponse.getFollowing(), order); }
 
         userFollowingListResponse.setUserName(user.getName());
         userFollowingListResponse.setUserId(user.getId());
@@ -69,5 +73,13 @@ public class UserUseCaseImpl implements UserUseCase {
 
         posts.sort(PostResponse::compareTo);
         return new UserFeedResponse(userId,posts);
+    }
+
+    public void orderListByName (List<SellerFollowedResponse> following, String order) {
+        following.sort(SellerFollowedResponse::compareTo);
+
+        if(order.equals("name_desc")){
+            Collections.reverse(following);
+        }
     }
 }

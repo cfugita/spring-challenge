@@ -25,9 +25,9 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/following/list")
-    public ResponseEntity<Object> listFollowers (@PathVariable Long userId) {
+    public ResponseEntity<Object> listFollowers (@PathVariable Long userId, @RequestParam(required = false) String order) {
         try {
-            return new ResponseEntity<>(this.userUseCase.getListFollowing(userId), HttpStatus.OK);
+            return new ResponseEntity<>(this.userUseCase.getListFollowing(userId, order), HttpStatus.OK);
         } catch (RuntimeException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }

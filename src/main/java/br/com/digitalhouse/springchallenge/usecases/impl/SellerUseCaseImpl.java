@@ -6,10 +6,14 @@ import br.com.digitalhouse.springchallenge.domain.SellerGateway;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowedResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerListResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowerResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class SellerUseCaseImpl implements SellerUseCase {
@@ -32,7 +36,7 @@ public class SellerUseCaseImpl implements SellerUseCase {
     }
 
     @Override
-    public SellerFollowerListResponse getListFollowers (Long sellerId) {
+    public SellerFollowerListResponse getListFollowers (Long sellerId, String order) {
 
         Seller seller = this.sellerGateway.getById(sellerId);
         SellerFollowerListResponse sellerFollowerListResponse = new SellerFollowerListResponse();
@@ -43,6 +47,8 @@ public class SellerUseCaseImpl implements SellerUseCase {
             sellerFollowerListResponse.getFollowers().add(userFollowerResponse);
         }
 
+        if(order != null) { this.orderListByName(sellerFollowerListResponse.getFollowers(), order); }
+
         sellerFollowerListResponse.setSellerName(seller.getName());
         sellerFollowerListResponse.setSellerId(seller.getId());
 
@@ -52,5 +58,13 @@ public class SellerUseCaseImpl implements SellerUseCase {
     @Override
     public void newPost(Long sellerId, Long productId, PostRequest postrequest) {
         this.sellerGateway.newPost(sellerId,productId,postrequest);
+    }
+
+    public void orderListByName (List<UserFollowerResponse> followers, String order) {
+        followers.sort(UserFollowerResponse::compareTo);
+
+        if(order.equals("name_desc")){
+            Collections.reverse(followers);
+        }
     }
 }

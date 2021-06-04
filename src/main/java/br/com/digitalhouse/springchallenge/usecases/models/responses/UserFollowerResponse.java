@@ -1,6 +1,6 @@
 package br.com.digitalhouse.springchallenge.usecases.models.responses;
 
-public class UserFollowerResponse {
+public class UserFollowerResponse implements Comparable<UserFollowerResponse> {
     private Long userId;
     private String userName;
 
@@ -26,5 +26,10 @@ public class UserFollowerResponse {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    @Override
+    public int compareTo(UserFollowerResponse o) {
+        return Integer.compare(this.getUserName().compareTo(o.getUserName()), 0);
     }
 }

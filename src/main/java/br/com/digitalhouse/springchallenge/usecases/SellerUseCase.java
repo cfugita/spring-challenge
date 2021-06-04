@@ -6,6 +6,6 @@ import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollo
 
 public interface SellerUseCase {
     SellerFollowerCountResponse countFollowers (Long sellerId);
-    SellerFollowerListResponse getListFollowers (Long sellerId);
+    SellerFollowerListResponse getListFollowers (Long sellerId, String order);
     void newPost (Long sellerId, Long productId, PostRequest postrequest);
 }
