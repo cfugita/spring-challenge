@@ -1,14 +1,18 @@
 package br.com.digitalhouse.springchallenge.usecases.impl;
 
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.PostDTO;
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.ProductDTO;
+import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Seller;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
+import br.com.digitalhouse.springchallenge.dataprovider.repository.ProductRepository;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.UserUseCase;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowedResponse;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerListResponse;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowerResponse;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowingListResponse;
+import br.com.digitalhouse.springchallenge.usecases.models.responses.*;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
@@ -38,5 +42,26 @@ public class UserUseCaseImpl implements UserUseCase {
         userFollowingListResponse.setUserId(user.getId());
 
         return userFollowingListResponse;
+    }
+
+    @Override
+    public UserFeedResponse getFeed(Long userId) {
+        List<PostDTO> postsDTO = this.userGateway.getFeed(userId);
+        List<PostResponse> posts = new ArrayList<>();
+
+        for(PostDTO postDTO : postsDTO) {
+            ProductDTO productDTO = postDTO.getDetails();
+            ProductResponse productResponse = new ProductResponse(
+                    productDTO.getProductId(),
+                    productDTO.getProductName(),
+                    productDTO.getType(),
+                    productDTO.getBrand(),
+                    productDTO.getColor(),
+                    productDTO.getNotes());
+
+            PostResponse postResponse = new PostResponse(postDTO.getPostId(),postDTO.getDate(),productResponse,postDTO.getCategory(),postDTO.getPrice());
+            posts.add(postResponse);
+        }
+        return new UserFeedResponse(userId,posts);
     }
 }
