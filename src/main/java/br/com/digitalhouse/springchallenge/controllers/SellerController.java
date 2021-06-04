@@ -1,11 +1,7 @@
 package br.com.digitalhouse.springchallenge.controllers;
 
-import br.com.digitalhouse.springchallenge.dataprovider.entity.Post;
-import br.com.digitalhouse.springchallenge.usecases.PostUseCase;
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class SellerController {
 
     SellerUseCase sellerUseCase;
-    PostUseCase postUseCase;
 
-    public SellerController(SellerUseCase sellerUseCase, PostUseCase postUseCase) {
+    public SellerController(SellerUseCase sellerUseCase) {
         this.sellerUseCase = sellerUseCase;
-        this.postUseCase = postUseCase;
     }
 
     @GetMapping("/{sellerId}/followers/count/")

@@ -26,6 +26,10 @@ public class UserUseCaseImpl implements UserUseCase {
     public void followSeller(Long userId, Long sellerId) {
         this.userGateway.followSeller(userId,sellerId);
     }
+    @Override
+    public void unfollowSeller(Long userId, Long sellerId) {
+        this.userGateway.unfollowSeller(userId,sellerId);
+    }
 
     @Override
     public UserFollowingListResponse getListFollowing(Long userId) {
@@ -62,6 +66,8 @@ public class UserUseCaseImpl implements UserUseCase {
             PostResponse postResponse = new PostResponse(postDTO.getPostId(),postDTO.getDate(),productResponse,postDTO.getCategory(),postDTO.getPrice());
             posts.add(postResponse);
         }
+
+        posts.sort(PostResponse::compareTo);
         return new UserFeedResponse(userId,posts);
     }
 }

@@ -2,7 +2,7 @@ package br.com.digitalhouse.springchallenge.usecases.models.responses;
 
 import java.util.Date;
 
-public class PostResponse {
+public class PostResponse implements Comparable<PostResponse>{
     private Long postId;
     private Date date;
     private ProductResponse detail;
@@ -58,5 +58,18 @@ public class PostResponse {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @Override
+    public int compareTo(PostResponse postResponse) {
+        if(this.getDate().after(postResponse.getDate())){
+            return -1;
+        }
+
+        if(this.getDate().before(postResponse.getDate())){
+            return 1;
+        }
+
+        return 0;
     }
 }

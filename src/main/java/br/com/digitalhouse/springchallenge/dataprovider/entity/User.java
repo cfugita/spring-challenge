@@ -53,4 +53,8 @@ public class User {
     public void addFollowing(Seller seller){
         this.getFollowing().add(seller);
     }
+
+    public void removeFollowing(Seller seller){
+        this.getFollowing().remove(seller);
+    }
 }

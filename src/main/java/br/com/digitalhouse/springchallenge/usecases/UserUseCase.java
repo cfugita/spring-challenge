@@ -5,6 +5,7 @@ import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowi
 
 public interface UserUseCase {
     void followSeller (Long userId, Long sellerId);
+    void unfollowSeller (Long userId, Long sellerId);
     UserFollowingListResponse getListFollowing (Long userId);
     UserFeedResponse getFeed (Long userId);
 }

@@ -53,6 +53,10 @@ public class Seller {
         this.getFollowers().add(user);
     }
 
+    public void removeFollower(User user){
+        this.getFollowers().remove(user);
+    }
+
     public List<Product> getProducts() {
         return products;
     }

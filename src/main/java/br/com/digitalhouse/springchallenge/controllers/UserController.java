@@ -19,6 +19,11 @@ public class UserController {
         this.userUseCase.followSeller(userId,sellerId);
     }
 
+    @PostMapping("/{userId}/unfollow/{sellerId}")
+    public void unfollowSeller (@PathVariable Long userId, @PathVariable Long sellerId) {
+        this.userUseCase.unfollowSeller(userId,sellerId);
+    }
+
     @GetMapping("/{userId}/following/list")
     public ResponseEntity<Object> listFollowers (@PathVariable Long userId) {
         try {

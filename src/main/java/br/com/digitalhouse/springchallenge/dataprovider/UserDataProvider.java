@@ -39,6 +39,18 @@ public class UserDataProvider implements UserGateway {
     }
 
     @Override
+    public void unfollowSeller(Long userId, Long sellerId) {
+
+        Seller seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst().get();
+        User user = this.userRepository.findAll().stream().filter(u -> u.getId().equals(userId)).findFirst().get();
+
+        user.removeFollowing(seller);
+        seller.removeFollower(user);
+        this.sellerRepository.save(seller);
+        this.userRepository.save(user);
+    }
+
+    @Override
     public User getById(Long userId) {
         Optional<User> user = this.userRepository.findAll().stream().filter(s -> s.getId().equals(userId)).findFirst();
         return user.orElse(null);
