@@ -18,20 +18,12 @@ public class SellerController {
 
     @GetMapping("/{sellerId}/followers/count/")
     public ResponseEntity<Object> countFollowers (@PathVariable Long sellerId) {
-        try {
-            return new ResponseEntity<>(this.sellerUseCase.countFollowers(sellerId), HttpStatus.OK);
-        } catch (RuntimeException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.sellerUseCase.countFollowers(sellerId), HttpStatus.OK);
     }
 
     @GetMapping("/{sellerId}/followers/list/")
     public ResponseEntity<Object> listFollowers (@PathVariable Long sellerId, @RequestParam(required = false) String order) {
-        try {
-            return new ResponseEntity<>(this.sellerUseCase.getListFollowers(sellerId, order), HttpStatus.OK);
-        } catch (RuntimeException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.sellerUseCase.getListFollowers(sellerId, order), HttpStatus.OK);
     }
 
     @PostMapping("{sellerId}/product/{productId}/newPost")

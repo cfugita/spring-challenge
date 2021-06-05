@@ -10,6 +10,6 @@ import java.util.List;
 public interface UserGateway {
     void followSeller (Long userId,Long sellerId);
     void unfollowSeller (Long userId,Long sellerId);
-    User getById (Long userId);
+    User getUserById (Long userId);
     List<PostDTO> getFeed(Long userId);
 }

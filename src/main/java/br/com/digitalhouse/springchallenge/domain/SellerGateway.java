@@ -6,7 +6,7 @@ import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 
 public interface SellerGateway {
-    Seller getById(Long sellerId);
+    Seller getSellerById(Long sellerId);
     void newPost(Long sellerId, Long productId, PostRequest postRequest);
     Product getProductById(Long sellerId, Long productId);
 }

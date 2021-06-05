@@ -62,10 +62,10 @@ public class PostResponse implements Comparable<PostResponse>{
 
     @Override
     public int compareTo(PostResponse postResponse) {
-        if(this.getDate().after(postResponse.getDate())){
+        if(this.getDate().before(postResponse.getDate())){
             return -1;
         }
-        if(this.getDate().before(postResponse.getDate())){
+        if(this.getDate().after(postResponse.getDate())){
             return 1;
         }
         return 0;

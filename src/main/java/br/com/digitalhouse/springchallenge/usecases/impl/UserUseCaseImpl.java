@@ -2,17 +2,14 @@ package br.com.digitalhouse.springchallenge.usecases.impl;
 
 import br.com.digitalhouse.springchallenge.dataprovider.DTO.PostDTO;
 import br.com.digitalhouse.springchallenge.dataprovider.DTO.ProductDTO;
-import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Seller;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
-import br.com.digitalhouse.springchallenge.dataprovider.repository.ProductRepository;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.UserUseCase;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,11 +32,10 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public UserFollowingListResponse getListFollowing(Long userId, String order) {
-        User user = this.userGateway.getById(userId);
+        User user = this.userGateway.getUserById(userId);
         UserFollowingListResponse userFollowingListResponse = new UserFollowingListResponse();
 
         for (Seller seller : user.getFollowing()) {
-//            User user = this.userGateway.getById(userId);
             SellerFollowedResponse sellerFollowedResponse = new SellerFollowedResponse(seller.getId(), seller.getName());
             userFollowingListResponse.getFollowing().add(sellerFollowedResponse);
         }
@@ -78,7 +74,7 @@ public class UserUseCaseImpl implements UserUseCase {
     public void orderPostsByDate (List<PostResponse> posts, String order) {
         posts.sort(PostResponse::compareTo);
 
-        if(order.equals("date_asc")){
+        if(order.equals("date_desc")){
             Collections.reverse(posts);
         }
     }

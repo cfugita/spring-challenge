@@ -6,7 +6,6 @@ import br.com.digitalhouse.springchallenge.domain.SellerGateway;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowedResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerListResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowerResponse;
@@ -28,7 +27,7 @@ public class SellerUseCaseImpl implements SellerUseCase {
     @Override
     public SellerFollowerCountResponse countFollowers(Long sellerId) {
 
-        Seller seller = this.sellerGateway.getById(sellerId);
+        Seller seller = this.sellerGateway.getSellerById(sellerId);
 
         Integer countFollowers = seller.getFollowers().size();
 
@@ -38,7 +37,7 @@ public class SellerUseCaseImpl implements SellerUseCase {
     @Override
     public SellerFollowerListResponse getListFollowers (Long sellerId, String order) {
 
-        Seller seller = this.sellerGateway.getById(sellerId);
+        Seller seller = this.sellerGateway.getSellerById(sellerId);
         SellerFollowerListResponse sellerFollowerListResponse = new SellerFollowerListResponse();
 
         for (User user : seller.getFollowers()) {

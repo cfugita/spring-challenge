@@ -3,12 +3,11 @@ package br.com.digitalhouse.springchallenge.dataprovider;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Post;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Seller;
-import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 import br.com.digitalhouse.springchallenge.dataprovider.repository.ProductRepository;
 import br.com.digitalhouse.springchallenge.dataprovider.repository.SellerRepository;
 import br.com.digitalhouse.springchallenge.domain.SellerGateway;
+import br.com.digitalhouse.springchallenge.usecases.exceptions.NotFoundException;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
-import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,16 +24,23 @@ public class SellerDataProvider implements SellerGateway {
     }
 
     @Override
-    public Seller getById(Long sellerId) {
-        Optional<Seller> seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst();
-        return seller.orElse(null);
+    public Seller getSellerById(Long sellerId) {
+        Optional<Seller> sellerOpt = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst();
+
+        if(sellerOpt.isEmpty()) { throw new NotFoundException("Seller " + sellerId + " not found"); }
+
+        return sellerOpt.get();
     }
 
     @Override
     public Product getProductById (Long sellerId, Long productId) {
-        Seller seller = getById(sellerId);
-        Optional<Product> product = seller.getProducts().stream().filter(p -> p.getId().equals(productId)).findFirst();
-        return product.orElse(null);
+        Seller seller = getSellerById(sellerId);
+
+        Optional<Product> productOpt = seller.getProducts().stream().filter(p -> p.getId().equals(productId)).findFirst();
+
+        if(productOpt.isEmpty()) { throw new NotFoundException("Product " + productId + " not found for seller " + sellerId); }
+
+        return productOpt.get();
     }
 
     @Override

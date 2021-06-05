@@ -10,7 +10,8 @@ import br.com.digitalhouse.springchallenge.dataprovider.repository.UserRepositor
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 
-import org.hibernate.event.internal.PostDeleteEventListenerStandardImpl;
+import br.com.digitalhouse.springchallenge.usecases.exceptions.AlreadyDoneException;
+import br.com.digitalhouse.springchallenge.usecases.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,8 +30,10 @@ public class UserDataProvider implements UserGateway {
     @Override
     public void followSeller(Long userId, Long sellerId) {
 
-        Seller seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst().get();
-        User user = this.userRepository.findAll().stream().filter(u -> u.getId().equals(userId)).findFirst().get();
+        Seller seller = this.getSellerById(sellerId);
+        User user = this.getUserById(userId);
+
+        if(user.getFollowing().contains(seller)) { throw new AlreadyDoneException("User " + userId + " already follows seller " + sellerId); }
 
         user.addFollowing(seller);
         seller.addFollower(user);
@@ -40,9 +43,10 @@ public class UserDataProvider implements UserGateway {
 
     @Override
     public void unfollowSeller(Long userId, Long sellerId) {
+        Seller seller = this.getSellerById(sellerId);
+        User user = this.getUserById(userId);
 
-        Seller seller = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst().get();
-        User user = this.userRepository.findAll().stream().filter(u -> u.getId().equals(userId)).findFirst().get();
+        if(!user.getFollowing().contains(seller)) { throw new AlreadyDoneException("User " + userId + " does not follow seller " + sellerId); }
 
         user.removeFollowing(seller);
         seller.removeFollower(user);
@@ -51,14 +55,25 @@ public class UserDataProvider implements UserGateway {
     }
 
     @Override
-    public User getById(Long userId) {
-        Optional<User> user = this.userRepository.findAll().stream().filter(s -> s.getId().equals(userId)).findFirst();
-        return user.orElse(null);
+    public User getUserById(Long userId) {
+        Optional<User> userOpt = this.userRepository.findAll().stream().filter(s -> s.getId().equals(userId)).findFirst();
+
+        if(userOpt.isEmpty()) { throw new NotFoundException("User " + userId + " not found"); }
+
+        return userOpt.get();
+    }
+
+    public Seller getSellerById(Long sellerId) {
+        Optional<Seller> sellerOpt = this.sellerRepository.findAll().stream().filter(s -> s.getId().equals(sellerId)).findFirst();
+
+        if(sellerOpt.isEmpty()) { throw new NotFoundException("Seller " + sellerId + " not found"); }
+
+        return sellerOpt.get();
     }
 
     @Override
     public List<PostDTO> getFeed(Long userId) {
-        User user = getById(userId);
+        User user = this.getUserById(userId);
         List<Seller> sellerFollowing = user.getFollowing();
 
         Date date = Calendar.getInstance().getTime();
