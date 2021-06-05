@@ -5,7 +5,7 @@ import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 import br.com.digitalhouse.springchallenge.domain.SellerGateway;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
-import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerCountResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.SellerFollowerListResponse;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFollowerResponse;
@@ -55,8 +55,13 @@ public class SellerUseCaseImpl implements SellerUseCase {
     }
 
     @Override
-    public void newPost(Long sellerId, Long productId, PostRequest postrequest) {
-        this.sellerGateway.newPost(sellerId,productId,postrequest);
+    public void newPost(Long sellerId, Long productId) {
+        this.sellerGateway.newPost(sellerId,productId);
+    }
+
+    @Override
+    public void newPromoPost(Long sellerId, Long productId, PostPromoRequest postPromoRequest) {
+        this.sellerGateway.newPromoPost(sellerId,productId,postPromoRequest);
     }
 
     public void orderListByName (List<UserFollowerResponse> followers, String order) {
@@ -66,4 +71,6 @@ public class SellerUseCaseImpl implements SellerUseCase {
             Collections.reverse(followers);
         }
     }
+
+
 }

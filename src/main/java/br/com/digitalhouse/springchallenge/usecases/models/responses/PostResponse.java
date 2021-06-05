@@ -6,15 +6,11 @@ public class PostResponse implements Comparable<PostResponse>{
     private Long postId;
     private Date date;
     private ProductResponse detail;
-    private Integer category;
-    private double price;
 
-    public PostResponse(Long postId, Date date, ProductResponse detail, Integer category, double price) {
+    public PostResponse(Long postId, Date date, ProductResponse detail) {
         this.postId = postId;
         this.date = date;
         this.detail = detail;
-        this.category = category;
-        this.price = price;
     }
 
     public PostResponse() {
@@ -42,22 +38,6 @@ public class PostResponse implements Comparable<PostResponse>{
 
     public void setDetail(ProductResponse detail) {
         this.detail = detail;
-    }
-
-    public Integer getCategory() {
-        return category;
-    }
-
-    public void setCategory(Integer category) {
-        this.category = category;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     @Override

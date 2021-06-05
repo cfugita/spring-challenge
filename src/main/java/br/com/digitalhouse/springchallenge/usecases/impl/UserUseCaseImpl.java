@@ -61,9 +61,11 @@ public class UserUseCaseImpl implements UserUseCase {
                     productDTO.getType(),
                     productDTO.getBrand(),
                     productDTO.getColor(),
-                    productDTO.getNotes());
+                    productDTO.getNotes(),
+                    productDTO.getCategory(),
+                    productDTO.getPrice());
 
-            PostResponse postResponse = new PostResponse(postDTO.getPostId(),postDTO.getDate(),productResponse,postDTO.getCategory(),postDTO.getPrice());
+            PostResponse postResponse = new PostResponse(postDTO.getPostId(),postDTO.getDate(),productResponse);
             posts.add(postResponse);
         }
         if(order != null) { this.orderPostsByDate(posts,order); }

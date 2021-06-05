@@ -7,14 +7,18 @@ public class ProductResponse {
     private String brand;
     private String color;
     private String notes;
+    private Integer category;
+    private double price;
 
-    public ProductResponse(Long productId, String productName, String type, String brand, String color, String notes) {
+    public ProductResponse(Long productId, String productName, String type, String brand, String color, String notes, Integer category, double price) {
         this.productId = productId;
         this.productName = productName;
         this.type = type;
         this.brand = brand;
         this.color = color;
         this.notes = notes;
+        this.category = category;
+        this.price = price;
     }
 
     public ProductResponse() {
@@ -66,5 +70,21 @@ public class ProductResponse {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -37,9 +37,9 @@ public class SpringChallengeApplication implements CommandLineRunner {
 		userRepository.save(user1);
 		userRepository.save(user2);
 
-		Product product1 = new Product("Chair", "Gamer","Racer","Red","Special Edition");
-		Product product2 = new Product("Keyboard", "Gamer","Racer","White","Connection Bluetooth");
-		Product product3 = new Product("Notebook", "IdeaPad","Lenovo","Black","1TB");
+		Product product1 = new Product("Chair", "Gamer","Racer","Red","Special Edition",100,500.00);
+		Product product2 = new Product("Keyboard", "Gamer","Racer","White","Connection Bluetooth",120,210.00);
+		Product product3 = new Product("Notebook", "IdeaPad","Lenovo","Black","1TB",300,1200.00);
 
 		seller1.addProduct(product1);
 		seller1.addProduct(product3);

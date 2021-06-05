@@ -1,7 +1,7 @@
 package br.com.digitalhouse.springchallenge.controllers;
 
 import br.com.digitalhouse.springchallenge.usecases.SellerUseCase;
-import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +26,13 @@ public class SellerController {
         return new ResponseEntity<>(this.sellerUseCase.getListFollowers(sellerId, order), HttpStatus.OK);
     }
 
-    @PostMapping("{sellerId}/product/{productId}/newPost")
-    void newPost(@PathVariable Long sellerId, @PathVariable Long productId, @RequestBody PostRequest postRequest){
-        this.sellerUseCase.newPost(sellerId, productId, postRequest);
+    @PostMapping("{sellerId}/product/{productId}/newpost")
+    void newPost(@PathVariable Long sellerId, @PathVariable Long productId){
+        this.sellerUseCase.newPost(sellerId, productId);
+    }
+
+    @PostMapping("{sellerId}/product/{productId}/newpromopost")
+    void newPromoPost(@PathVariable Long sellerId, @PathVariable Long productId, @RequestBody PostPromoRequest postPromoRequest){
+        this.sellerUseCase.newPromoPost(sellerId, productId, postPromoRequest);
     }
 }

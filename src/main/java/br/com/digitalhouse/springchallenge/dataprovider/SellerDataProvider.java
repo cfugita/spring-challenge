@@ -7,7 +7,7 @@ import br.com.digitalhouse.springchallenge.dataprovider.repository.ProductReposi
 import br.com.digitalhouse.springchallenge.dataprovider.repository.SellerRepository;
 import br.com.digitalhouse.springchallenge.domain.SellerGateway;
 import br.com.digitalhouse.springchallenge.usecases.exceptions.NotFoundException;
-import br.com.digitalhouse.springchallenge.usecases.models.requests.PostRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -44,9 +44,17 @@ public class SellerDataProvider implements SellerGateway {
     }
 
     @Override
-    public void newPost(Long sellerId, Long productId, PostRequest postRequest) {
+    public void newPost(Long sellerId, Long productId) {
         Product product = getProductById(sellerId,productId);
-        Post post = new Post(postRequest.getCategory(),postRequest.getPrice());
+        Post post = new Post();
+        product.addPost(post);
+        this.productRepository.save(product);
+    }
+
+    @Override
+    public void newPromoPost(Long sellerId, Long productId, PostPromoRequest postPromoRequest) {
+        Product product = getProductById(sellerId,productId);
+        Post post = new Post(postPromoRequest.getDiscount());
         product.addPost(post);
         this.productRepository.save(product);
     }

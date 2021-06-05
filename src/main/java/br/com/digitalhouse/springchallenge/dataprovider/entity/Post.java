@@ -11,16 +11,20 @@ public class Post {
     @GeneratedValue
     private Long id;
     private Date date;
-    private Integer category;
-    private double price;
+    private Boolean hasPromo;
+    private double discount;
 
-    public Post(Integer category, double price) {
-        this.date = Calendar.getInstance().getTime();
-        this.category = category;
-        this.price = price;
-    }
 
     public Post() {
+        this.date = Calendar.getInstance().getTime();
+        this.hasPromo = false;
+        this.discount = 0.0;
+    }
+
+    public Post(double discount) {
+        this.date = Calendar.getInstance().getTime();
+        this.hasPromo = true;
+        this.discount = discount;
     }
 
     public Long getId() {
@@ -39,19 +43,19 @@ public class Post {
         this.date = date;
     }
 
-    public Integer getCategory() {
-        return category;
+    public Boolean getHasPromo() {
+        return hasPromo;
     }
 
-    public void setCategory(Integer category) {
-        this.category = category;
+    public void setHasPromo(Boolean hasPromo) {
+        this.hasPromo = hasPromo;
     }
 
-    public double getPrice() {
-        return price;
+    public double getDiscount() {
+        return discount;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setDiscount(double discount) {
+        this.discount = discount;
     }
 }

@@ -76,7 +76,7 @@ public class UserDataProvider implements UserGateway {
         User user = this.getUserById(userId);
         List<Seller> sellerFollowing = user.getFollowing();
 
-        Date date = Calendar.getInstance().getTime();
+        Date date = Calendar.getInstance().getTime(); // DATA P ULTIMA SEMANA AQUI!!!!!!
 
         List<PostDTO> postsFeed = new ArrayList<>();
 
@@ -85,11 +85,20 @@ public class UserDataProvider implements UserGateway {
             List<Product> sellerProducts = seller.getProducts();
 
             for(Product product : sellerProducts) {
-                ProductDTO productDTO = new ProductDTO(product.getId(), product.getName(), product.getType(),product.getBrand(), product.getColor(), product.getNotes());
+                ProductDTO productDTO = new ProductDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getType(),
+                        product.getBrand(),
+                        product.getColor(),
+                        product.getNotes(),
+                        product.getCategory(),
+                        product.getPrice());
+
                 List<Post> posts = product.getPosts().stream().filter(p -> p.getDate().before(date)).collect(Collectors.toList());
 
                 for (Post post : posts) {
-                    PostDTO postDTO = new PostDTO(post.getId(),post.getDate(),productDTO,post.getCategory(),post.getPrice());
+                    PostDTO postDTO = new PostDTO(post.getId(),post.getDate(),productDTO);
                     postsFeed.add(postDTO);
                 }
             }
