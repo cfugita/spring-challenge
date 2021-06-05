@@ -35,4 +35,14 @@ public class SellerController {
     void newPromoPost(@PathVariable Long sellerId, @PathVariable Long productId, @RequestBody PostPromoRequest postPromoRequest){
         this.sellerUseCase.newPromoPost(sellerId, productId, postPromoRequest);
     }
+
+    @GetMapping("/{sellerId}/product/countPromo")
+    public ResponseEntity<Object> countPromoPosts (@PathVariable Long sellerId) {
+        return new ResponseEntity<>(this.sellerUseCase.countPromoPosts(sellerId),HttpStatus.OK);
+    }
+
+    @GetMapping("/{sellerId}/product/listPromo")
+    public ResponseEntity<Object> listPromoPosts (@PathVariable Long sellerId) {
+        return new ResponseEntity<>(this.sellerUseCase.getPromoPosts(sellerId),HttpStatus.OK);
+    }
 }

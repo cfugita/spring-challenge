@@ -6,6 +6,7 @@ import br.com.digitalhouse.springchallenge.dataprovider.entity.Seller;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.UserUseCase;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.*;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +66,14 @@ public class UserUseCaseImpl implements UserUseCase {
                     productDTO.getCategory(),
                     productDTO.getPrice());
 
-            PostResponse postResponse = new PostResponse(postDTO.getPostId(),postDTO.getDate(),productResponse);
-            posts.add(postResponse);
+            if(postDTO.getHasPromo()) {
+                PostPromoResponse postResponse = new PostPromoResponse(postDTO.getPostId(),postDTO.getDate(),productResponse,postDTO.getHasPromo(),postDTO.getDiscount());
+                posts.add(postResponse);
+            }
+            else {
+                PostResponse postResponse = new PostResponse(postDTO.getPostId(), postDTO.getDate(), productResponse);
+                posts.add(postResponse);
+            }
         }
         if(order != null) { this.orderPostsByDate(posts,order); }
 

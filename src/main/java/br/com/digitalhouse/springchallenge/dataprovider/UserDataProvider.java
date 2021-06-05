@@ -98,7 +98,7 @@ public class UserDataProvider implements UserGateway {
                 List<Post> posts = product.getPosts().stream().filter(p -> p.getDate().before(date)).collect(Collectors.toList());
 
                 for (Post post : posts) {
-                    PostDTO postDTO = new PostDTO(post.getId(),post.getDate(),productDTO);
+                    PostDTO postDTO = new PostDTO(post.getId(),post.getDate(),productDTO, post.getHasPromo(),post.getDiscount());
                     postsFeed.add(postDTO);
                 }
             }

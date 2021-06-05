@@ -1,19 +1,20 @@
-package br.com.digitalhouse.springchallenge.usecases.models.requests;
-
-import br.com.digitalhouse.springchallenge.usecases.models.responses.ProductResponse;
+package br.com.digitalhouse.springchallenge.usecases.models.responses;
 
 import java.util.Date;
 
-public class PostPromoRequest {
+public class PostPromoResponse extends PostResponse{
     private Boolean hasPromo;
     private double discount;
 
-    public PostPromoRequest(Boolean hasPromo, double discount) {
+    public PostPromoResponse(Long postId, Date date, ProductResponse detail, Boolean hasPromo, double discount) {
+        super(postId, date, detail);
         this.hasPromo = hasPromo;
         this.discount = discount;
     }
 
-    public PostPromoRequest() {
+    public PostPromoResponse(Boolean hasPromo, double discount) {
+        this.hasPromo = hasPromo;
+        this.discount = discount;
     }
 
     public Boolean getHasPromo() {

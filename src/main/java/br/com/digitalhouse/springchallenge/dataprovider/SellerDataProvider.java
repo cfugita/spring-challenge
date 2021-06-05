@@ -1,5 +1,8 @@
 package br.com.digitalhouse.springchallenge.dataprovider;
 
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.FeedDTO;
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.PostDTO;
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.ProductDTO;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Post;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Seller;
@@ -8,9 +11,12 @@ import br.com.digitalhouse.springchallenge.dataprovider.repository.SellerReposit
 import br.com.digitalhouse.springchallenge.domain.SellerGateway;
 import br.com.digitalhouse.springchallenge.usecases.exceptions.NotFoundException;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.responses.PostResponse;
+import br.com.digitalhouse.springchallenge.usecases.models.responses.UserFeedResponse;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SellerDataProvider implements SellerGateway {
@@ -41,6 +47,34 @@ public class SellerDataProvider implements SellerGateway {
         if(productOpt.isEmpty()) { throw new NotFoundException("Product " + productId + " not found for seller " + sellerId); }
 
         return productOpt.get();
+    }
+
+    @Override
+    public FeedDTO getPosts(Long sellerId) {
+        Seller seller = getSellerById(sellerId);
+        List<PostDTO> posts = new ArrayList<>();
+
+        Date date = Calendar.getInstance().getTime();
+
+        for(Product product : seller.getProducts()) {
+            ProductDTO productDTO = new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getType(),
+                    product.getBrand(),
+                    product.getColor(),
+                    product.getNotes(),
+                    product.getCategory(),
+                    product.getPrice());
+
+            List<Post> postsOfProduct = product.getPosts().stream().filter(p -> p.getDate().before(date)).collect(Collectors.toList());
+
+            for (Post post : postsOfProduct) {
+                PostDTO postDTO = new PostDTO(post.getId(),post.getDate(),productDTO, post.getHasPromo(),post.getDiscount());
+                posts.add(postDTO);
+            }
+        }
+        return new FeedDTO(seller.getId(), seller.getName(), posts);
     }
 
     @Override

@@ -5,11 +5,15 @@ public class PostDTO {
     private Long postId;
     private Date date;
     private ProductDTO details;
+    private Boolean hasPromo;
+    private double discount;
 
-    public PostDTO(Long postId, Date date, ProductDTO details) {
+    public PostDTO(Long postId, Date date, ProductDTO details, Boolean hasPromo, double discount) {
         this.postId = postId;
         this.date = date;
         this.details = details;
+        this.hasPromo = hasPromo;
+        this.discount = discount;
     }
 
     public PostDTO() {
@@ -39,4 +43,19 @@ public class PostDTO {
         this.details = details;
     }
 
+    public Boolean getHasPromo() {
+        return hasPromo;
+    }
+
+    public void setHasPromo(Boolean hasPromo) {
+        this.hasPromo = hasPromo;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
 }
