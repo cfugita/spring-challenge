@@ -11,16 +11,27 @@ public class User {
     private Long id;
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
-            name = "User_Seller",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "seller_id")}
+            name = "FOLLOWS",
+            joinColumns = @JoinColumn(name = "following_id"),
+            inverseJoinColumns = @JoinColumn(name = "followed_id")
     )
-    private List<Seller> following = new ArrayList<>();
+    private List<User> following = new ArrayList<>();
 
-    public User(String name) {
+    @ManyToMany(mappedBy = "following")
+    private List<User> followers = new ArrayList<>();
+
+    private Boolean isSeller;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="user_id")
+    private List<Product> products = new ArrayList<>();
+
+
+    public User(String name, Boolean isSeller) {
         this.name = name;
+        this.isSeller = isSeller;
     }
 
     public User() {
@@ -42,19 +53,55 @@ public class User {
         this.name = name;
     }
 
-    public List<Seller> getFollowing() {
+    public List<User> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<Seller> following) {
+    public void setFollowing(List<User> following) {
         this.following = following;
     }
 
-    public void addFollowing(Seller seller){
-        this.getFollowing().add(seller);
+    public void addFollowing(User user){
+        this.getFollowing().add(user);
     }
 
-    public void removeFollowing(Seller seller){
-        this.getFollowing().remove(seller);
+    public void removeFollowing(User user){
+        this.getFollowing().remove(user);
+    }
+
+    public List<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<User> followers) {
+        this.followers = followers;
+    }
+
+    public Boolean getIsSeller() {
+        return isSeller;
+    }
+
+    public void setSeller(Boolean isSeller) {
+        this.isSeller = isSeller;
+    }
+
+    public Boolean getSeller() {
+        return isSeller;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void addProducts(Product product) {
+        this.products.add(product);
+    }
+
+    public void removeProducts(Product product) {
+        this.products.remove(product);
     }
 }

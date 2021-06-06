@@ -3,13 +3,15 @@ import java.util.Date;
 
 public class PostDTO {
     private Long postId;
+    private String userName;
     private Date date;
     private ProductDTO details;
     private Boolean hasPromo;
     private double discount;
 
-    public PostDTO(Long postId, Date date, ProductDTO details, Boolean hasPromo, double discount) {
+    public PostDTO(Long postId, String userName, Date date, ProductDTO details, Boolean hasPromo, double discount) {
         this.postId = postId;
+        this.userName = userName;
         this.date = date;
         this.details = details;
         this.hasPromo = hasPromo;
@@ -25,6 +27,14 @@ public class PostDTO {
 
     public void setPostId(Long postId) {
         this.postId = postId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Date getDate() {

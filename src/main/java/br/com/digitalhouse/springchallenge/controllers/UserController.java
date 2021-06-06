@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/{userId}")
 public class UserController {
     private UserUseCase userUseCase;
 
@@ -14,27 +14,28 @@ public class UserController {
         this.userUseCase = userUseCase;
     }
 
-    @PostMapping("/{userId}/follow/{sellerId}")
-    public void followSeller (@PathVariable Long userId, @PathVariable Long sellerId) {
-        this.userUseCase.followSeller(userId,sellerId);
+    @PostMapping("/follow/{userToFollowId}")
+    public void follow (@PathVariable Long userId, @PathVariable Long userToFollowId) {
+        this.userUseCase.follow(userId,userToFollowId);
     }
 
-    @PostMapping("/{userId}/unfollow/{sellerId}")
-    public void unfollowSeller (@PathVariable Long userId, @PathVariable Long sellerId) {
-        this.userUseCase.unfollowSeller(userId,sellerId);
+    @PostMapping("/unfollow/{userToUnfollowId}")
+    public void unfollow (@PathVariable Long userId, @PathVariable Long userToUnfollowId) {
+        this.userUseCase.unfollow(userId,userToUnfollowId);
     }
 
-    @GetMapping("/{userId}/following/list")
-    public ResponseEntity<Object> listFollowers (@PathVariable Long userId, @RequestParam(required = false) String order) {
+    @GetMapping("/following/list")
+    public ResponseEntity<Object> listFollowing (@PathVariable Long userId, @RequestParam(required = false) String order) {
         return new ResponseEntity<>(this.userUseCase.getListFollowing(userId, order), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/products/following")
-    public ResponseEntity<Object> getFeed (@PathVariable Long userId, @RequestParam(required = false) String order) {
-        try {
-            return new ResponseEntity<>(this.userUseCase.getFeed(userId, order), HttpStatus.OK);
-        } catch (RuntimeException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("/followers/count")
+    public ResponseEntity<Object> countFollowers (@PathVariable Long userId) {
+        return new ResponseEntity<>(this.userUseCase.countFollowers(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/followers/list")
+    public ResponseEntity<Object> listFollowers (@PathVariable Long userId, @RequestParam(required = false) String order) {
+        return new ResponseEntity<>(this.userUseCase.getListFollowers(userId, order), HttpStatus.OK);
     }
 }

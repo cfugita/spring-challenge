@@ -1,15 +1,17 @@
 package br.com.digitalhouse.springchallenge.usecases.models.responses;
 
-public class UserFollowerResponse implements Comparable<UserFollowerResponse> {
+public class PostCountResponse {
     private Long userId;
     private String userName;
+    private Integer postCount;
 
-    public UserFollowerResponse(Long userId, String userName) {
+    public PostCountResponse(Long userId, String userName, Integer postCount) {
         this.userId = userId;
         this.userName = userName;
+        this.postCount = postCount;
     }
 
-    public UserFollowerResponse() {
+    public PostCountResponse() {
     }
 
     public Long getUserId() {
@@ -28,8 +30,11 @@ public class UserFollowerResponse implements Comparable<UserFollowerResponse> {
         this.userName = userName;
     }
 
-    @Override
-    public int compareTo(UserFollowerResponse o) {
-        return Integer.compare(this.getUserName().compareTo(o.getUserName()), 0);
+    public Integer getPostCount() {
+        return postCount;
+    }
+
+    public void setPostCount(Integer postCount) {
+        this.postCount = postCount;
     }
 }

@@ -1,18 +1,12 @@
 package br.com.digitalhouse.springchallenge.usecases.models.responses;
-import java.util.List;
 
-public class UserFeedResponse {
+public class UserResponse implements Comparable<UserResponse> {
     private Long userId;
     private String userName;
-    private List<PostResponse> posts;
 
-    public UserFeedResponse(Long userId, String userName, List<PostResponse> posts) {
+    public UserResponse(Long userId, String userName) {
         this.userId = userId;
         this.userName = userName;
-        this.posts = posts;
-    }
-
-    public UserFeedResponse() {
     }
 
     public Long getUserId() {
@@ -31,11 +25,8 @@ public class UserFeedResponse {
         this.userName = userName;
     }
 
-    public List<PostResponse> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<PostResponse> posts) {
-        this.posts = posts;
+    @Override
+    public int compareTo(UserResponse o) {
+        return Integer.compare(this.getUserName().compareTo(o.getUserName()), 0);
     }
 }

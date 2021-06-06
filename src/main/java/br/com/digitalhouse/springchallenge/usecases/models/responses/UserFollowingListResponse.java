@@ -6,9 +6,9 @@ import java.util.List;
 public class UserFollowingListResponse {
     private Long userId;
     private String userName;
-    private List<SellerFollowedResponse> following;
+    private List<UserResponse> following;
 
-    public UserFollowingListResponse(Long userId, String userName, List<SellerFollowedResponse> following) {
+    public UserFollowingListResponse(Long userId, String userName, List<UserResponse> following) {
         this.userId = userId;
         this.userName = userName;
         this.following = following;
@@ -34,11 +34,11 @@ public class UserFollowingListResponse {
         this.userName = userName;
     }
 
-    public List<SellerFollowedResponse> getFollowing() {
+    public List<UserResponse> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<SellerFollowedResponse> following) {
+    public void setFollowing(List<UserResponse> following) {
         this.following = following;
     }
 }

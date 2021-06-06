@@ -1,18 +1,20 @@
 package br.com.digitalhouse.springchallenge.usecases.models.responses;
-import java.util.List;
 
-public class UserFeedResponse {
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class UserFollowerCountResponse {
     private Long userId;
     private String userName;
-    private List<PostResponse> posts;
+    private Integer followerCount;
 
-    public UserFeedResponse(Long userId, String userName, List<PostResponse> posts) {
+    public UserFollowerCountResponse(Long userId, String userName, Integer followerCount) {
         this.userId = userId;
         this.userName = userName;
-        this.posts = posts;
+        this.followerCount = followerCount;
     }
 
-    public UserFeedResponse() {
+    public UserFollowerCountResponse() {
     }
 
     public Long getUserId() {
@@ -31,11 +33,11 @@ public class UserFeedResponse {
         this.userName = userName;
     }
 
-    public List<PostResponse> getPosts() {
-        return posts;
+    public Integer getFollowerCount() {
+        return followerCount;
     }
 
-    public void setPosts(List<PostResponse> posts) {
-        this.posts = posts;
+    public void setFollowerCount(Integer followerCount) {
+        this.followerCount = followerCount;
     }
 }

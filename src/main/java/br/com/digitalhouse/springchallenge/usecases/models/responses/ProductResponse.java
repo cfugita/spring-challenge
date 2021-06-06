@@ -1,5 +1,7 @@
 package br.com.digitalhouse.springchallenge.usecases.models.responses;
 
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.ProductDTO;
+
 public class ProductResponse {
     private Long productId;
     private String productName;
@@ -22,6 +24,17 @@ public class ProductResponse {
     }
 
     public ProductResponse() {
+    }
+
+    public ProductResponse(ProductDTO productDTO) {
+        this.productId = productDTO.getProductId();
+        this.productName = productDTO.getProductName();
+        this.type = productDTO.getType();
+        this.brand = productDTO.getBrand();
+        this.color = productDTO.getColor();
+        this.notes = productDTO.getNotes();
+        this.category = productDTO.getCategory();
+        this.price = productDTO.getPrice();
     }
 
     public Long getProductId() {
