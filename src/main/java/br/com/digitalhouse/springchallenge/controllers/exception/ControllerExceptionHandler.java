@@ -35,4 +35,15 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Object> illegalArgument (IllegalArgumentException e) {
+        StandardError err = new StandardError(
+                Calendar.getInstance().getTime(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Bad Request",
+                e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+
 }

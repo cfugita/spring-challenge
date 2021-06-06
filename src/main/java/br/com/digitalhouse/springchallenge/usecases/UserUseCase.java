@@ -12,6 +12,6 @@ public interface UserUseCase {
     void newPost (Long userId, Long productId);
     void newPromoPost (Long userId, Long productId, PostPromoRequest postPromoRequest);
     UserFeedResponse getFeed (Long userId, String order);
-    PostCountResponse countPosts (Long userId);
-    UserFeedResponse getOwnPosts(Long userId);
+    PostCountResponse countPosts (Long userId, String type);
+    UserFeedResponse getOwnPosts(Long userId, String type);
 }

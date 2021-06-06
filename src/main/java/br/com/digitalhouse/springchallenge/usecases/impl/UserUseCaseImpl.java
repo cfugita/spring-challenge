@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserUseCaseImpl implements UserUseCase {
@@ -52,7 +53,7 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public UserFollowerCountResponse countFollowers(Long userId) {
         User user = this.userGateway.getUserById(userId);
-        if(!user.getIsSeller()) { throw new AlreadyDoneException("User " + userId + " can't be followed"); }
+        if(!user.getIsSeller()) { throw new IllegalArgumentException("User " + userId + " can't be followed"); }
 
         Integer countFollowers = user.getFollowers().size();
 
@@ -62,7 +63,7 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public UserFollowerListResponse getListFollowers(Long userId, String order) {
         User user = this.userGateway.getUserById(userId);
-        if(!user.getIsSeller()) { throw new AlreadyDoneException("User " + userId + " can't be followed"); }
+        if(!user.getIsSeller()) { throw new IllegalArgumentException("User " + userId + " can't be followed"); }
         UserFollowerListResponse userFollowerListResponse = new UserFollowerListResponse();
 
         for (User userFollowed : user.getFollowers()) {
@@ -99,15 +100,23 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public PostCountResponse countPosts (Long userId) {
+    public PostCountResponse countPosts (Long userId, String type) {
         FeedDTO feedDTO = this.userGateway.getOwnPosts(userId);
-        return new PostCountResponse(feedDTO.getUserId(), feedDTO.getUserName(), feedDTO.getPosts().size());
+        List<PostDTO> postDTOS = feedDTO.getPosts();
+
+        if(type != null) { postDTOS = this.filterPromoPosts(feedDTO.getPosts(), type); }
+
+        return new PostCountResponse(feedDTO.getUserId(), feedDTO.getUserName(), postDTOS.size());
     }
 
     @Override
-    public UserFeedResponse getOwnPosts(Long userId) {
+    public UserFeedResponse getOwnPosts (Long userId, String type) {
         FeedDTO feedDTO = this.userGateway.getOwnPosts(userId);
-        List<PostResponse> posts = getPostResponse(feedDTO.getPosts());
+        List<PostDTO> postDTOS = feedDTO.getPosts();
+
+        if(type != null) { postDTOS = this.filterPromoPosts(feedDTO.getPosts(), type); }
+
+        List<PostResponse> posts = getPostResponse(postDTOS);
 
 //        if(order != null) { this.orderPostsByDate(posts, order); }
 
@@ -133,18 +142,40 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     public void orderPostsByDate (List<PostResponse> posts, String order) {
-        posts.sort(PostResponse::compareTo);
 
-        if(order.equals("date_desc")){
-            Collections.reverse(posts);
+        if(order.equals("date_asc")){
+            posts.sort(PostResponse::compareTo);
+            return;
         }
+        else if (order.equals("date_desc")) {
+            posts.sort(PostResponse::compareTo);
+            Collections.reverse(posts);
+            return;
+        }
+
+        throw new IllegalArgumentException("Parameter 'order' not accepted");
     }
 
     public void orderListByName (List<UserResponse> following, String order) {
-        following.sort(UserResponse::compareTo);
 
-        if(order.equals("name_desc")){
-            Collections.reverse(following);
+        if(order.equals("name_asc")){
+            following.sort(UserResponse::compareTo);
+            return;
         }
+        else if(order.equals("name_desc")) {
+            following.sort(UserResponse::compareTo);
+            Collections.reverse(following);
+            return;
+        }
+
+        throw new IllegalArgumentException("Parameter 'order' not accepted");
     }
+
+    public List<PostDTO> filterPromoPosts (List<PostDTO> posts, String type) {
+        if(type.equals("promo")) {
+            return posts.stream().filter(PostDTO::getHasPromo).toList();
+        }
+
+        throw new IllegalArgumentException("Parameter 'type' not accepted");
+     }
 }

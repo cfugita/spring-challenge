@@ -38,7 +38,7 @@ public class UserDataProvider implements UserGateway {
             throw new AlreadyDoneException("User " + userToFollowId + " can't be followed"); }
 
         if(userFollowing.getFollowing().contains(userToFollow)) {
-            throw new AlreadyDoneException("User " + userId + " already follows user " + userToFollow); }
+            throw new AlreadyDoneException("User " + userId + " already follows user " + userToFollowId); }
 
         userFollowing.addFollowing(userToFollow);
 
@@ -73,7 +73,7 @@ public class UserDataProvider implements UserGateway {
     public Product getProductById (Long userId, Long productId) {
         User user = getUserById(userId);
         if(!user.getIsSeller()) {
-            throw new AlreadyDoneException("User " + userId + " is not a seller"); }
+            throw new IllegalArgumentException("User " + userId + " is not a seller"); }
 
         Optional<Product> productOpt = user.getProducts().stream().filter(p -> p.getId().equals(productId)).findFirst();
 
@@ -116,7 +116,8 @@ public class UserDataProvider implements UserGateway {
     public FeedDTO getOwnPosts(Long userId) {
         User user = this.getUserById(userId);
 
-        if(!user.getIsSeller()) { throw new AlreadyDoneException("User " + userId + " is not a seller"); }
+        if(!user.getIsSeller()) {
+            throw new IllegalArgumentException("User " + userId + " is not a seller"); }
 
         List<PostDTO> postsFeed = getPostsByUser(user);
 
