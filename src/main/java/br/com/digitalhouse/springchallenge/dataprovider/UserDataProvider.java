@@ -200,7 +200,7 @@ public class UserDataProvider implements UserGateway {
                     product.getCategory(),
                     product.getPrice());
 
-            List<Post> posts = product.getPosts().stream().filter(p -> p.getDate().before(date)).collect(Collectors.toList());
+            List<Post> posts = product.getPosts().stream().filter(p -> p.getDate().after(date)).collect(Collectors.toList());
 
             for (Post post : posts) {
                 PostDTO postDTO = new PostDTO(
