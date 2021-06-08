@@ -5,6 +5,7 @@ import br.com.digitalhouse.springchallenge.dataprovider.DTO.PostDTO;
 import br.com.digitalhouse.springchallenge.dataprovider.DTO.ProductDTO;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Post;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
+import br.com.digitalhouse.springchallenge.dataprovider.repository.PostRepository;
 import br.com.digitalhouse.springchallenge.dataprovider.repository.ProductRepository;
 import br.com.digitalhouse.springchallenge.dataprovider.repository.UserRepository;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
@@ -13,6 +14,7 @@ import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 import br.com.digitalhouse.springchallenge.usecases.exceptions.AlreadyDoneException;
 import br.com.digitalhouse.springchallenge.usecases.exceptions.NotFoundException;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.ProductRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,10 +24,17 @@ import java.util.stream.Collectors;
 public class UserDataProvider implements UserGateway {
     private UserRepository userRepository;
     private ProductRepository productRepository;
+    private PostRepository postRepository;
 
-    public UserDataProvider(UserRepository userRepository, ProductRepository productRepository) {
+    public UserDataProvider(UserRepository userRepository, ProductRepository productRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.postRepository = postRepository;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
     }
 
     @Override
@@ -35,13 +44,15 @@ public class UserDataProvider implements UserGateway {
         User userToFollow = this.getUserById(userToFollowId);
 
         if(!userToFollow.getIsSeller()) {
-            throw new AlreadyDoneException("User " + userToFollowId + " can't be followed"); }
+            throw new IllegalArgumentException("User " + userToFollowId + " can't be followed"); }
 
         if(userFollowing.getFollowing().contains(userToFollow)) {
             throw new AlreadyDoneException("User " + userId + " already follows user " + userToFollowId); }
 
-        userFollowing.addFollowing(userToFollow);
+        if(userId.equals(userToFollowId)) {
+            throw new IllegalArgumentException("Users can't follow themselves"); }
 
+        userFollowing.addFollowing(userToFollow);
         this.userRepository.save(userFollowing);
     }
 
@@ -84,19 +95,65 @@ public class UserDataProvider implements UserGateway {
     }
 
     @Override
-    public void newPost (Long userId, Long productId) {
-        Product product = getProductById(userId,productId);
-        Post post = new Post();
-        product.addPost(post);
-        this.productRepository.save(product);
+    public ProductDTO newProduct(Long userId, ProductRequest productRequest) {
+        User user = getUserById(userId);
+
+        if(!user.getIsSeller()) { throw new IllegalArgumentException("User " + userId + " is not a seller"); }
+
+        Product product = new Product(
+                productRequest.getName(),
+                productRequest.getType(),
+                productRequest.getBrand(),
+                productRequest.getColor(),
+                productRequest.getNotes(),
+                productRequest.getCategory(),
+                productRequest.getPrice());
+
+        product = this.productRepository.save(product);
+        user.addProducts(product);
+        this.userRepository.save(user);
+
+        return new ProductDTO(product);
     }
 
     @Override
-    public void newPromoPost (Long userId, Long productId, PostPromoRequest postPromoRequest) {
+    public List<ProductDTO> productsByUser(Long userId) {
+        User user = this.getUserById(userId);
+
+        if(!user.getIsSeller()) { throw new IllegalArgumentException("User " + userId + " is not a seller"); }
+
+        List<ProductDTO> products = new ArrayList<>();
+
+        for(Product product : user.getProducts()) {
+            ProductDTO productDTO = new ProductDTO(product);
+            products.add(productDTO);
+        }
+
+        return products;
+    }
+
+    @Override
+    public PostDTO newPost (Long userId, Long productId) {
         Product product = getProductById(userId,productId);
-        Post post = new Post(postPromoRequest.getDiscount());
+        User user = this.getUserById(userId);
+        Post post = new Post();
+        post = this.postRepository.save(post);
         product.addPost(post);
-        this.productRepository.save(product);
+        product = this.productRepository.save(product);
+
+        return new PostDTO(user.getName(),post,product);
+    }
+
+    @Override
+    public PostDTO newPromoPost (Long userId, Long productId, PostPromoRequest postPromoRequest) {
+        Product product = getProductById(userId,productId);
+        User user = this.getUserById(userId);
+        Post post = new Post(postPromoRequest.getDiscount());
+        post = this.postRepository.save(post);
+        product.addPost(post);
+        product = this.productRepository.save(product);
+        product.addPost(post);
+        return new PostDTO(user.getName(),post,product);
     }
 
     @Override
@@ -127,7 +184,10 @@ public class UserDataProvider implements UserGateway {
     public List<PostDTO> getPostsByUser (User user) {
         List<PostDTO> postsByUser = new ArrayList<>();
         List<Product> userProducts = user.getProducts();
-        Date date = Calendar.getInstance().getTime(); // DATA P ULTIMA SEMANA AQUI!!!!!!
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -14);
+        Date date = cal.getTime();
 
         for(Product product : userProducts) {
             ProductDTO productDTO = new ProductDTO(

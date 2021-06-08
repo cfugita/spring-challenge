@@ -2,11 +2,14 @@ package br.com.digitalhouse.springchallenge.usecases.impl;
 
 import br.com.digitalhouse.springchallenge.dataprovider.DTO.FeedDTO;
 import br.com.digitalhouse.springchallenge.dataprovider.DTO.PostDTO;
+import br.com.digitalhouse.springchallenge.dataprovider.DTO.ProductDTO;
+import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
 import br.com.digitalhouse.springchallenge.dataprovider.entity.User;
 import br.com.digitalhouse.springchallenge.domain.UserGateway;
 import br.com.digitalhouse.springchallenge.usecases.UserUseCase;
 import br.com.digitalhouse.springchallenge.usecases.exceptions.AlreadyDoneException;
 import br.com.digitalhouse.springchallenge.usecases.models.requests.PostPromoRequest;
+import br.com.digitalhouse.springchallenge.usecases.models.requests.ProductRequest;
 import br.com.digitalhouse.springchallenge.usecases.models.responses.*;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,27 @@ public class UserUseCaseImpl implements UserUseCase {
 
     public UserUseCaseImpl(UserGateway userGateway) {
         this.userGateway = userGateway;
+    }
+
+    @Override
+    public List<UserInfoResponse> getAllUsers() {
+        List<User> usersEntity = this.userGateway.getAllUsers();
+        List<UserInfoResponse> usersInfo = new ArrayList<>();
+
+        for(User user : usersEntity) {
+            List<Long> following = user.getFollowing().stream().map(User::getId).toList();
+            if(!user.getIsSeller()){
+                UserInfoResponse userInfo = new UserInfoResponse(user.getId(), user.getName(), user.getIsSeller(), following);
+                usersInfo.add(userInfo);
+            }
+            else {
+                List<Long> followers = user.getFollowers().stream().map(User::getId).toList();
+                List<Long> products = user.getProducts().stream().map(Product::getId).toList();
+                UserSellerInfoResponse userSellerInfo = new UserSellerInfoResponse(user.getId(), user.getName(), user.getIsSeller(), following, followers, products);
+                usersInfo.add(userSellerInfo);
+            }
+        }
+        return usersInfo;
     }
 
     @Override
@@ -80,13 +104,36 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public void newPost(Long userId, Long productId) {
-        this.userGateway.newPost(userId,productId);
+    public ProductResponse newProduct(Long userId, ProductRequest productRequest) {
+        ProductDTO productDTO = this.userGateway.newProduct(userId,productRequest);
+        return new ProductResponse(productDTO);
     }
 
     @Override
-    public void newPromoPost(Long userId, Long productId, PostPromoRequest postPromoRequest) {
-        this.userGateway.newPromoPost(userId, productId, postPromoRequest);
+    public UserProductsResponse productsByUser(Long userId) {
+        List<ProductResponse> products = new ArrayList<>();
+        List<ProductDTO> productsDTO = this.userGateway.productsByUser(userId);
+
+        for(ProductDTO productDTO : productsDTO) {
+            ProductResponse productResponse = new ProductResponse(productDTO);
+            products.add(productResponse);
+        }
+
+        return new UserProductsResponse(userId, products);
+    }
+
+    @Override
+    public PostResponse newPost(Long userId, Long productId) {
+        PostDTO postDTO = this.userGateway.newPost(userId,productId);
+        ProductDTO productDTO = postDTO.getDetails();
+        return new PostResponse(postDTO, new ProductResponse(productDTO));
+    }
+
+    @Override
+    public PostPromoResponse newPromoPost(Long userId, Long productId, PostPromoRequest postPromoRequest) {
+        PostDTO postDTO = this.userGateway.newPromoPost(userId, productId, postPromoRequest);
+        ProductDTO productDTO = postDTO.getDetails();
+        return new PostPromoResponse(postDTO, new ProductResponse(productDTO));
     }
 
     @Override

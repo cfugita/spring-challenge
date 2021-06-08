@@ -1,5 +1,7 @@
 package br.com.digitalhouse.springchallenge.dataprovider.DTO;
 
+import br.com.digitalhouse.springchallenge.dataprovider.entity.Product;
+
 public class ProductDTO {
     private Long productId;
     private String productName;
@@ -19,6 +21,17 @@ public class ProductDTO {
         this.notes = notes;
         this.category = category;
         this.price = price;
+    }
+
+    public ProductDTO(Product product) {
+        this.productId = product.getId();
+        this.productName = product.getName();
+        this.type = product.getType();
+        this.brand = product.getBrand();
+        this.color = product.getColor();
+        this.notes = product.getNotes();
+        this.category = product.getCategory();
+        this.price = product.getPrice();
     }
 
     public ProductDTO() {

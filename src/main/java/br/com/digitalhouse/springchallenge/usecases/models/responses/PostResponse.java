@@ -1,13 +1,17 @@
 package br.com.digitalhouse.springchallenge.usecases.models.responses;
 
 import br.com.digitalhouse.springchallenge.dataprovider.DTO.PostDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 
 public class PostResponse implements Comparable<PostResponse>{
     private Long postId;
     private String userName;
+
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm")
     private Date date;
+
     private ProductResponse detail;
 
     public PostResponse(Long postId, String userName, Date date, ProductResponse detail) {

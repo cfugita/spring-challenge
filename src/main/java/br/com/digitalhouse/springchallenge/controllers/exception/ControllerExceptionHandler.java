@@ -28,11 +28,11 @@ public class ControllerExceptionHandler {
     public ResponseEntity<Object> alreadyDone (AlreadyDoneException e) {
         StandardError err = new StandardError(
                 Calendar.getInstance().getTime(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
+                HttpStatus.CONFLICT.value(),
+                "Conflict",
                 e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
