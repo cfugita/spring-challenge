@@ -11,20 +11,3 @@ documentação anexada.
 
 ## [Documentação completa](https://documenter.getpostman.com/view/15850575/TzY6AEqf)
 Documentação feita no Postman.
-
-## Relação dos requisitos técnicos e Aplicação
-
-Req. Técnicos    |   Aplicação    
----------------- | --------------------
-US 0001          |   Follow            
-US 0002          |   GetUserCountFollowers   
-US 0003          |   GetUserListFollowers     
-US 0004          |   GetUserListFollowing     
-US 0005          |   CreateNewPost    
-US 0006          |   GetUserFeed     
-US 0007          |   Unfollow  
-US 0008          |   GetUserListFollowers &  GetUserListFollowing    
-US 0009          |   GetUserFeed   
-US 0010          |   NewProduct & CreateNewPromoPost     
-US 0011          |   GetUserCountPosts     
-US 0012          |   GetUserListPosts     
